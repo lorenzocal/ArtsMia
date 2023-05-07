@@ -7,6 +7,7 @@ package it.polito.tdp.artsmia;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.artsmia.model.ArtObject;
 import it.polito.tdp.artsmia.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,12 +48,29 @@ public class FXMLController {
     
     @FXML
     void doAnalizzaOggetti(ActionEvent event) {
-
+    	this.model.createGraphOptimized();
+    	if (this.model.getGraph().edgeSet().size() != 0) {
+    		this.txtResult.appendText("Il grafo è stato correttamente creato.\n");
+    	}
     }
 
     @FXML
     void doCalcolaComponenteConnessa(ActionEvent event) {
-
+    	
+    	try { 
+    		ArtObject artObject = this.model.getArtObjectIdMap().get(Integer.parseInt(this.txtObjectId.getText()));
+    		
+    		if (artObject != null) {
+    			this.txtResult.appendText("La componente connessa del grafo contenente il vertice indicato ha " + 
+    					String.valueOf(model.componenteConnessa(artObject).size()) + " vertici.\n");
+    		}
+    		else {
+    			this.txtResult.appendText("L'identificativo inserito non corrsiponde a nessun oggetto d'arte presente nel database.\n");
+    		}
+    		
+    	} catch (NumberFormatException nfe) {
+    		this.txtResult.appendText("L'identificativo inserito non è nel formato corretto.\nSono ammessi solo caratteri numerici.\n");
+    	}
     }
 
     @FXML
